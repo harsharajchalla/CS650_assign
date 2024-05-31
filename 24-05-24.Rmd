@@ -1,0 +1,148 @@
+---
+title: "Week 6 Demo"
+author: "Samah Senbel"
+date: "May 24, 2024"
+output: html_document
+---
+
+\`\`\`{r} library(ggplot2)
+
+# Read the data
+
+all \<- read.csv(file.choose()) \# winequality_red.csv head(all)
+
+# Plot sulfurdioxide vs pH
+
+qplot(data=all, x=sulfurdioxide, y=pH) \# kind of Obvious!!!
+
+# Convert to a matrix as clustering works better on a matrix
+
+mat \<- cbind(all$sulfurdioxide, all$pH) head(mat)
+
+# Perform k-means clustering
+
+kmeans_result \<- kmeans(mat, centers=3)
+
+# Extract the cluster assignments
+
+km \<- kmeans_result\$cluster
+
+# Add cluster assignments to the data
+
+all\$cl \<- factor(km) head(all)
+
+# Summary of the data
+
+summary(all)
+
+# Plot sulfurdioxide vs pH colored by clusters
+
+qplot(data=all, x=sulfurdioxide, y=pH, color=cl)
+
+# Read the data again
+
+all \<- read.csv(file.choose()) \# open winequality_red.csv head(all)
+
+# Plot pH
+
+qplot(data=all, y=pH) \# All over the place!!
+
+# Perform k-means clustering on pH
+
+kmeans_result_pH \<- kmeans(all\$pH, centers=3)
+
+# Extract the cluster assignments for pH
+
+km_pH \<- kmeans_result_pH\$cluster
+
+# Add cluster assignments to the data
+
+all\$cl \<- factor(km_pH)
+
+# Plot pH colored by cluster
+
+qplot(data=all, y=pH, color=cl)
+
+# Plot alcohol
+
+qplot(data=all, y=alcohol) \# All over the place!!
+
+# Perform k-means clustering on alcohol
+
+kmeans_result_alcohol \<- kmeans(all\$alcohol, centers=3)
+
+# Extract the cluster assignments for alcohol
+
+km_alcohol \<- kmeans_result_alcohol\$cluster
+
+# Add cluster assignments to the data
+
+all\$cl \<- factor(km_alcohol)
+
+# Plot alcohol colored by quality
+
+qplot(data=all, y=alcohol, color=quality)
+
+# Plot alcohol colored by cluster
+
+qplot(data=all, y=alcohol, color=cl)
+
+# Read the data again
+
+all \<- read.csv(file.choose()) \# open winequality_red.csv head(all)
+
+# Plot sulfurdioxide, pH, and alcohol
+
+qplot(data=all, y=sulfurdioxide) qplot(data=all, y=pH) qplot(data=all, y=alcohol)
+
+# Convert to a matrix
+
+mat \<- cbind(all$sulfurdioxide, all$pH, all\$alcohol) head(mat)
+
+# Perform k-means clustering
+
+kmeans_result_all \<- kmeans(mat, centers=3)
+
+# Extract the cluster assignments
+
+km_all \<- kmeans_result_all\$cluster
+
+# Add cluster assignments to the data
+
+all\$cl \<- factor(km_all)
+
+# Plot data colored by clusters
+
+qplot(data=all, y=sulfurdioxide, color=cl) qplot(data=all, y=pH, color=cl) qplot(data=all, y=alcohol, color=cl) qplot(data=all, x=alcohol, y=sulfurdioxide, color=cl) qplot(data=all, x=alcohol, y=pH, color=cl) qplot(data=all, x=pH, y=alcohol, color=cl)
+
+# Read different data
+
+all \<- read.csv(file.choose()) \# open grades_km_input.csv head(all)
+
+# Install and load plot3D library
+
+install.packages("plot3D") library("plot3D")
+
+# 3D scatter plot
+
+scatter3D(all$sulfurdioxide, all$pH, all\$alcohol)
+
+# Convert to a matrix
+
+mat \<- cbind(all$sulfurdioxide, all$pH, all\$alcohol) head(mat)
+
+# Perform k-means clustering
+
+kmeans_result_3D \<- kmeans(mat, centers=3)
+
+# Extract the cluster assignments
+
+km_3D \<- kmeans_result_3D\$cluster
+
+# Add cluster assignments to the data
+
+all\$cl \<- km_3D
+
+# 3D scatter plot colored by clusters
+
+scatter3D(all$sulfurdioxide, all$pH, all$alcohol, colvar=all$cl)
